@@ -15,7 +15,26 @@ def property_list(request):
     return JsonResponse(list(properties), safe=False)
 
 
-
 def property_list(request):
     properties = get_all_properties()
-    return render(request, 'properties/property_list.html', {'properties': properties})
+    data = [
+        {
+            "id": prop.id,
+            "title": prop.title,
+            "description": prop.description,
+            "price": str(prop.price),
+            "location": prop.location,
+            "created_at": prop.created_at.isoformat(),
+        }
+        for prop in properties
+    ]
+
+    return JsonResponse({
+        "success": True,
+        "data": data
+    })
+
+
+# def property_list(request):
+#     properties = get_all_properties()
+#     return render(request, 'properties/property_list.html', {'properties': properties})
